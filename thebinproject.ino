@@ -1,43 +1,40 @@
-#include <Keypad.h>
+#include <Stepper.h>
 #include <Adafruit_NeoPixel.h>
 
-const uint8_t KEYPAD_ROWS = 4;
-const uint8_t KEYPAD_COLS = 3;
-byte rowPins[KEYPAD_ROWS] = {0, 1, 2, 3};
-byte colPins[KEYPAD_COLS] = {4, 5, 6};
-char keys[KEYPAD_ROWS][KEYPAD_COLS] = {
-  { '1', '2', '3', },
-  { '4', '5', '6', },
-  { '7', '8', '9', },
-  { '*', '0', '#', }
-};
-
+#define MOTION 16
 #define NEOPIXEL 17       
 #define NUMPIXELS 1
 
-Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, KEYPAD_ROWS, KEYPAD_COLS);
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, NEOPIXEL, NEO_GRB + NEO_KHZ800);
+const int stepsPerRevolution = 50;  
 
-#define MOTION 16
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, NEOPIXEL, NEO_GRB + NEO_KHZ800);
+Stepper myStepper(stepsPerRevolution, 3, 2, 1, 0);
+
 
 void setup() {
   pinMode(MOTION, INPUT);
   strip.begin();
   strip.show();
   Serial1.begin(115200);
+  myStepper.setSpeed(30);
 }
 
 
 void loop() {
-  bool motion_detected = digitalRead(MOTION);
-  char key = keypad.getKey();
+  bool motionDetected = digitalRead(MOTION);
 
-  if (motion_detected) {
+  if (digitalRead(MOTION) == HIGH) {
     strip.setPixelColor(0, strip.Color(255, 255, 255));
     strip.show();
+    Serial1.println("Motion Detected, Opening.");
   } else {
-    strip.setPixelColor(0,strip.Color(0, 0, 0));
+    strip.setPixelColor(0, strip.Color(0, 0, 0));
     strip.show();
+    Serial1.println("Closed");
+  }
+
+  while (motionDetected) {
+    myStepper.step(stepsPerRevolution);
   }
 
   delay(1); 
