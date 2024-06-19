@@ -1,39 +1,47 @@
 #include <Keypad.h>
 #include <Adafruit_NeoPixel.h>
 
-const uint8_t ROWS = 4;
-const uint8_t COLS = 3;
+const uint8_t KEYPAD_ROWS = 4;
+const uint8_t KEYPAD_COLS = 3;
 byte rowPins[KEYPAD_ROWS] = {0, 1, 2, 3};
 byte colPins[KEYPAD_COLS] = {4, 5, 6};
-char keys[ROWS][COLS] = {
+char keys[KEYPAD_ROWS][KEYPAD_COLS] = {
   { '1', '2', '3', },
   { '4', '5', '6', },
   { '7', '8', '9', },
   { '*', '0', '#', }
 };
 
+#define NEOPIXEL 17       
+#define NUMPIXELS 1
+
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, KEYPAD_ROWS, KEYPAD_COLS);
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, NEOPIXEL, NEO_GRB + NEO_KHZ800);
 
 #define motion 16
-#define neoPixel 6           
-#define NUMPIXELS 17 
-bool motion_detected = digitalRead(motion);
 
 void setup() {
   pinMode(motion, INPUT);
   strip.begin();
   strip.show();
   Serial1.begin(115200);
-  Serial1.println("Hello, Raspberry Pi Pico W!");
 }
+
+
 void loop() {
-  colorWipe(strip.Color(255, 0, 0), 50);
+  bool motion_detected = digitalRead(motion);
+  char key = keypad.getKey();
+
   if (motion_detected) {
-    Serial1.println("Motion detected!");
+    strip.setPixelColor(0, strip.Color(255, 255, 255));
+    strip.show();
+    if (key != NO_KEY) {
+      Serial.println(key);
+    }
   } else {
-    Serial1.println("No motion.");
+    strip.setPixelColor(0,strip.Color(0, 0, 0));
+    strip.show();
   }
 
-  delay(1); // this speeds up the simulation
+  delay(1); 
 }
