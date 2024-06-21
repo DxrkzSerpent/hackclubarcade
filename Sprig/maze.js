@@ -16,6 +16,14 @@ const end = "e"
 let level = 0
 const levels = [
   map`
+bbbbbbb
+bpb...b
+b.b.b.b
+b.b.b.b
+b.b.b.b
+b...beb
+bbbbbbb`,
+  map`
 bbbbbbbbbb
 bpb......b
 b.b.bbbb.b
@@ -36,7 +44,90 @@ bb.bbb.b.b
 bb.....b.b
 b..bbbbb.b
 b.bb.....b
-bbbbbbbbbb`
+bbbbbbbbbb`,
+  map`
+bbbbbbbbbbbbbbbbb
+b...p...........b
+b.bb.bbbbbbbbbbbb
+b.b...........b.b
+b.b..bbbbbbbbbb.b
+b.b..be.........b
+b.b..bbbbbbbbbb.b
+b.b.bbbbbbbbbbb.b
+b.b.b.........b.b
+b.b.bbbbbbbbb.b.b
+b.b.......bbb.b.b
+b.b.bbbbb.......b
+b.b.....bbbbbbbbb
+b.b.bbb.........b
+b.b.b...bbbbbbb.b
+b...bbbbb.......b
+bbbbbbbbbbbbbbbbb`,
+  map`
+bbbbbbbbbbbbbbbbbbbb
+b............b.b...b
+b.bb.bbbbbbbbb.b.b.b
+b.b...b........b.b.b
+b.bbbbb.b.bbbb.b.b.b
+b.......b.b..b.b.b.b
+bbbbbbbbb....b...b.b
+b.......bbbb.bbbbb.b
+b.bbbbb.b..b...b.b.b
+b.b...b.b..bbb.b.b.b
+b.b.b........b.b.b.b
+b.bbbb.b.bbbbb.b.b.b
+b....b.b.b.....b.b.b
+bbbb.b.b.b.bbb.b.b.b
+b....b.b.b.b.b.b.b.b
+b.bbbbbbbb.b...b.b.b
+b.be.......b.b.b...b
+b.bbbbbbbbbbbbbbbb.b
+b....p.............b
+bbbbbbbbbbbbbbbbbbbb`,
+  map`
+bbbbbbbbbbbbbbbbbbbbbbbbbbb
+b...................p.....b
+bbbbbbbbbb.b.bbbbbbb.bbbb.b
+b..........b.b.b...b.b.bb.b
+b.bbbbbbbb.b.....b.b.b..b.b
+b.b........b.bbb.b.b.bb.b.b
+b.b.bbbbbbbb.b.b.b.b....b.b
+b.bbb........b.bbb.b.bbbb.b
+b.....bbbbbb.b.bb..b......b
+bbbbb.b......b....bbbbb.b.b
+b...bbbbbbbb.bbb.bb.b.b.b.b
+b.b.b......b...bbbb.b.bbb.b
+b.b.b..bbbbbbb......b.b...b
+b.b.bb.be....bbbbbbbb.b.b.b
+b.b....bbbbb........b...b.b
+b.b.bb.b...b.bbbbbbbbbbbb.b
+b.b.b...bb.b.b..........b.b
+b.b.bbb.bb.b.b.bbbbbbbb.b.b
+b.b...b..b.b.b.b...b..b.b.b
+b.b.b.bb.b.b.b...b....b.b.b
+bbb.b.b..b.b.bbbbbbbb.b.b.b
+b.b.b.b.bb.b........b.b...b
+b.b.b.b..b.bbbbbb.bbb.bbbbb
+b.b.b.b.............b.....b
+b.b.bbbbbbbbbbbbbbbbbbb.bbb
+b.........................b
+bbbbbbbbbbbbbbbbbbbbbbbbbbb`,
+  map`
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+...............
+.........p.....`,
 ];
 
 setLegend(
@@ -133,9 +224,10 @@ onInput("d", () => {
 
 
 afterInput(() => {
-  if (tilesWith(end, player).length == 1 && level < 5) { 
+  if (tilesWith(end, player).length == 1 && level < 6) {
     level = level + 1;
-  } else if (level == 5) {
-    addText("you win!", {y: 4, color: color`5` });
+    setMap(levels[level])
+  } else if (level == 6) {
+    addText("you win!", { y: 4, color: color`5` });
   }
 })
